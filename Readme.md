@@ -54,8 +54,6 @@ The Lag Calculator performs the following steps to calculate the lag for a given
 
 5. **Total Lag Calculation:** Finally, the total lag is calculated by summing up the individual partition lags.
 
-6. **Display Results:** The total lag is displayed on the console.
-
 ## Contributing
 
 If you'd like to contribute to the Lag Calculator project, please follow these guidelines:
