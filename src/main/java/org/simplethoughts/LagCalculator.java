@@ -16,15 +16,21 @@ public class LagCalculator {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         LagCalculator lg = new LagCalculator();
-//        System.out.println(lg.analyzeLag("test2","localhost:9092"));
-        AdminClient adminClient = lg.getAdminClient("localhost:9092");
-
+        System.out.println(lg.getTotalLag("my-first-application","192.168.0.104:9092"));
     }
     public Map<TopicPartition, Long> analyzeLag(String groupId, String bootstrapServerConfig) throws ExecutionException, InterruptedException {
         Map<TopicPartition, Long> consumerGrpOffsets = getConsumerGrpOffsets(groupId,bootstrapServerConfig);
         Map<TopicPartition, Long> producerOffsets = getProducerOffsets(consumerGrpOffsets,bootstrapServerConfig);
-        Map<TopicPartition, Long> lags = computeLags(consumerGrpOffsets, producerOffsets);
-        return lags;
+        return computeLags(consumerGrpOffsets, producerOffsets);
+    }
+
+    public Integer getTotalLag(String groupId, String bootstrapServerConfig) throws ExecutionException, InterruptedException {
+        int totalLag=0;
+        Map<TopicPartition, Long> lags = analyzeLag(groupId, bootstrapServerConfig);
+        for(long partitionLag: lags.values()){
+            totalLag = totalLag + (int) partitionLag;
+        }
+        return totalLag;
     }
 
     private AdminClient getAdminClient(String bootstrapServerConfig) {
